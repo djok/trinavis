@@ -508,7 +508,7 @@ func getFileName(startWith string) string {
 	return ""
 }
 
-const path = "/home/trinavis/data"
+const path = "./data"
 
 func reset() {
 	term.Sync() // cosmestic purpose
