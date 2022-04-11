@@ -1,1 +1,2 @@
 .vs/**
+gui-app/node_modules/**

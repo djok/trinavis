@@ -1,0 +1,19 @@
+{
+  "name": "gui-app",
+  "version": "1.0.0",
+  "description": "Trinavis Player",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/djok/trinavis"
+  },
+  "author": "Rosen Velikov",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^18.0.3"
+  }
+}

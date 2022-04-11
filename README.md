@@ -16,6 +16,7 @@ ExecStart=-/sbin/agetty --noissue --autologin MY_USERNAME %I $TERM
 Type=idle
 ```
 ### gnome
+gsettings set org.gnome.desktop.screensaver lock-enabled false
 gsettings set org.gnome.desktop.background picture-options 'centered'
 gsettings set org.gnome.desktop.background picture-options 'scaled'
 gsettings set org.gnome.desktop.background picture-uri file:////home/rosen/trinavis/data/star/bulgaria.png
