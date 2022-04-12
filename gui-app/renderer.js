@@ -16,15 +16,15 @@ async function* getFiles(dir) {
   }
 }
 
-var mySongs = {}
+
 var myPng = []
 var keyEscape = false
 var bufEscape = ""
 var keyStar = false
 var bufStar = ""
 
-
-;(async () => {
+async function readMp3Files() {
+  var mySongs = {}
   for await (const f of getFiles(`./${asset_path}`)) {
     // const myArray = f.split("assets0f8m3quovf")[1];
     // let word = myArray[1];
@@ -33,6 +33,7 @@ var bufStar = ""
     var songId = fn.split(path.sep)[1].split(".")[0]
     var songName = fn.split(path.sep)[1].split(".")[1]
     var extType = fn.split(path.sep)[1].split(".")[2]
+    var mySongs = {}
     switch (extType) {
       case "mp3":
         if (mySongs[`${plist}/${songId}`] === undefined) {
@@ -53,42 +54,47 @@ var bufStar = ""
         myPng[plist] = f
         break;
     }
-    
+
     // console.log(f, plist, songId, songName);
   }
-})()
+  return mySongs
+}
+
+readMp3Files().then(files => {
+  console.log(myPng["star"])
+  Amplitude.init({
+    songs: [
+      {
+        name: '',
+        artist: '',
+        album: '',
+        url: '',
+        cover_art_url: `${mySongs.png_star}`
+      }
+    ]
+  });
+})
 // initPlaylist("star")
 // var startBg = mySongs.png_star
-console.log(myPng["star"])
-Amplitude.init({
-  songs: [
-    {
-      name: '',
-      artist: '',
-      album: '',
-      url: '',
-      cover_art_url: `${mySongs.png_star}`
-    }
-  ]
-});
 
-function handleKeyPress (event) {
+
+function handleKeyPress(event) {
   console.log(`You pressed ${event.key}`)
   switch (event.key) {
-    case 'Enter': 
+    case 'Enter':
       console.log(Amplitude.getPlayerState())
       switch (Amplitude.getPlayerState()) {
-        case "playing": 
+        case "playing":
           Amplitude.pause()
-          console.log ("PLAY>PAUSE")
+          console.log("PLAY>PAUSE")
           break;
-        case "stopped": 
+        case "stopped":
           Amplitude.play()
-          console.log ("STOP>PLAY")
+          console.log("STOP>PLAY")
           break;
-        case "paused": 
+        case "paused":
           Amplitude.play()
-          console.log ("PAUSE>PLAY")
+          console.log("PAUSE>PLAY")
           break;
       }
       break;
@@ -96,12 +102,12 @@ function handleKeyPress (event) {
       document.getElementById("amplitude-volume-up").click()
       break;
     case "1":
-      playNow(1,1)
+      playNow(1, 1)
       break;
   }
 }
 
-function playNow(plist,songId) {
+function playNow(plist, songId) {
   if (mySongs[`${plist}/${songId}`] === undefined) {
     return;
   }
@@ -110,19 +116,19 @@ function playNow(plist,songId) {
   Amplitude.playNow(song)
 }
 
-function initPlaylist (plist) {
+function initPlaylist(plist) {
   var zerosong = {
-      name: '',
-      artist: '',
-      album: '',
-      url: '',
-      cover_art_url: ''
+    name: '',
+    artist: '',
+    album: '',
+    url: '',
+    cover_art_url: ''
   }
   zerosong.cover_art_url = mySongs[`${plist}/png`]
 
   console.log("BG:", mySongs);
 
-  Amplitude.init({songs: [zerosong]});
+  Amplitude.init({ songs: [zerosong] });
 }
 
 window.addEventListener('keyup', handleKeyPress, true)

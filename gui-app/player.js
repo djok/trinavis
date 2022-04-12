@@ -16,9 +16,10 @@ async function* getFiles(dir) {
   }
 }
 
-var mySongs = {};
 
-;(async () => {
+async function readMp3Files() {
+  var mySongs = {};
+
   for await (const f of getFiles(`./${asset_path}`)) {
     // const myArray = f.split("assets0f8m3quovf")[1];
     // let word = myArray[1];
@@ -29,25 +30,29 @@ var mySongs = {};
     var extType = fn.split(path.sep)[1].split(".")[2]
     switch (extType) {
       case "mp3":
-        mySongs[`${plist}`][`${songId}`] = 
+        mySongs[`${plist}:${songId}`] =
         {
-            name: `${songName}`,
-            artist: `Unknown`,
-            album: `${plist}`,
-            url: `${f}`,
-            cover_art_url: ''
+          name: `${songName}`,
+          artist: `Unknown`,
+          album: `${plist}`,
+          url: `${f}`,
+          cover_art_url: ''
         }
         break;
       case "png":
-        mySongs[`${plist}`][`png`] = `${f}`
+        mySongs[`${plist}:png`] = `${f}`
         break;
     }
-    
+
     console.log(f, plist, songId, songName);
   }
-})()
+  return mySongs
+}
 
-Amplitude.init({
+readMp3Files().then(files => {
+  console.log('files: ', files)
+
+  Amplitude.init({
     songs: [
       {
         name: 'Equilibrium I (Cello version)',
@@ -57,4 +62,7 @@ Amplitude.init({
         cover_art_url: `.${path.sep}${asset_path}${path.sep}star${path.sep}bulgaria.png`
       }
     ]
-});
+  });
+})
+
+
