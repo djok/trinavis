@@ -4,6 +4,11 @@ const { readdir } = require('fs').promises;
 const asset_path = "assets0f8m3quovf"
 const path = require('path')
 
+var keyEscape = false
+var bufEscape = ""
+var keyStar = false
+var bufStar = ""
+
 async function* getFiles(dir) {
   const dirents = await readdir(dir, { withFileTypes: true });
   for (const dirent of dirents) {
@@ -16,13 +21,10 @@ async function* getFiles(dir) {
   }
 }
 
-
 async function readMp3Files() {
   var mySongs = {};
 
   for await (const f of getFiles(`./${asset_path}`)) {
-    // const myArray = f.split("assets0f8m3quovf")[1];
-    // let word = myArray[1];
     var fn = f.split(`${path.sep}${asset_path}${path.sep}`)[1]
     var plist = fn.split(path.sep)[0]
     var songId = fn.split(path.sep)[1].split(".")[0]
@@ -43,26 +45,63 @@ async function readMp3Files() {
         mySongs[`${plist}:png`] = `${f}`
         break;
     }
-
-    console.log(f, plist, songId, songName);
   }
   return mySongs
 }
 
-readMp3Files().then(files => {
-  console.log('files: ', files)
+files = readMp3Files()
+// readMp3Files().then(files => {
+Amplitude.init({ songs: [initPlaylist("star", files)] });
+window.addEventListener('keyup', handleKeyPress, true)
+// })
 
-  Amplitude.init({
-    songs: [
-      {
-        name: 'Equilibrium I (Cello version)',
-        artist: 'David Hilowitz',
-        album: 'Equilibrium I (Cello version)',
-        url: './music/David_Hilowitz_-_Equilibrium_I_Cello_version.mp3',
-        cover_art_url: `.${path.sep}${asset_path}${path.sep}star${path.sep}bulgaria.png`
+function handleKeyPress(event) {
+  console.log(`You pressed ${event.key}`)
+  switch (event.key) {
+    case 'Enter':
+      console.log(Amplitude.getPlayerState())
+      switch (Amplitude.getPlayerState()) {
+        case "playing":
+          Amplitude.pause()
+          console.log("PLAY>PAUSE")
+          break;
+        case "stopped":
+          Amplitude.play()
+          console.log("STOP>PLAY")
+          break;
+        case "paused":
+          Amplitude.play()
+          console.log("PAUSE>PLAY")
+          break;
       }
-    ]
-  });
-})
+      break;
+    case "+":
+      document.getElementById("amplitude-volume-up").click()
+      break;
+    case "1":
+      playNow(1, 1, files)
+      break;
+  }
+}
 
+function playNow(plist, songId, mySongs) {
+  if (mySongs[`${plist}/${songId}`] === undefined) {
+    return;
+  }
+  song = mySongs[`${plist}:${songId}`]
+  song.cover_art_url = mySongs[`${plist}:png`]
+  Amplitude.playNow(song)
+}
+
+function initPlaylist(plist, myList) {
+  var zerosong = {
+    name: '',
+    artist: '',
+    album: '',
+    url: '',
+    cover_art_url: ''
+  }
+  zerosong.cover_art_url = myList[`${plist}:png`]
+  return zerosong
+}
 
