@@ -49,40 +49,42 @@ async function readMp3Files() {
   return mySongs
 }
 
-files = readMp3Files()
-// readMp3Files().then(files => {
-Amplitude.init({ songs: [initPlaylist("star", files)] });
-window.addEventListener('keyup', handleKeyPress, true)
-// })
+readMp3Files().then(mp3files => {
+  Amplitude.init({ songs: [initPlaylist("star", mp3files)] });
+  window.addEventListener('keyup', newKeyPressHandler(mp3files), true)
+})
 
-function handleKeyPress(event) {
-  console.log(`You pressed ${event.key}`)
-  switch (event.key) {
-    case 'Enter':
-      console.log(Amplitude.getPlayerState())
-      switch (Amplitude.getPlayerState()) {
-        case "playing":
-          Amplitude.pause()
-          console.log("PLAY>PAUSE")
-          break;
-        case "stopped":
-          Amplitude.play()
-          console.log("STOP>PLAY")
-          break;
-        case "paused":
-          Amplitude.play()
-          console.log("PAUSE>PLAY")
-          break;
-      }
-      break;
-    case "+":
-      document.getElementById("amplitude-volume-up").click()
-      break;
-    case "1":
-      playNow(1, 1, files)
-      break;
+function newKeyPressHandler(mp3Files) {
+  return function (event) {
+    console.log(`You pressed ${event.key}`)
+    switch (event.key) {
+      case 'Enter':
+        console.log(Amplitude.getPlayerState())
+        switch (Amplitude.getPlayerState()) {
+          case "playing":
+            Amplitude.pause()
+            console.log("PLAY>PAUSE")
+            break;
+          case "stopped":
+            Amplitude.play()
+            console.log("STOP>PLAY")
+            break;
+          case "paused":
+            Amplitude.play()
+            console.log("PAUSE>PLAY")
+            break;
+        }
+        break;
+      case "+":
+        document.getElementById("amplitude-volume-up").click()
+        break;
+      case "1":
+        playNow(1, 1, files)
+        break;
+    }
   }
 }
+
 
 function playNow(plist, songId, mySongs) {
   if (mySongs[`${plist}/${songId}`] === undefined) {
