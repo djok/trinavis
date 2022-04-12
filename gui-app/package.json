@@ -15,5 +15,25 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^18.0.3"
+  },
+  "dependencies": {
+    "amplitudejs": "^4.1.0",
+    "paths": "^0.1.1",
+    "fs": "^0.0.1-security"
+  },
+  "build": {
+    "files": [
+      "dist/**/*"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "extraResources": [
+      {
+        "from": "./public",
+        "to": "assets"
+      }
+    ]
   }
 }

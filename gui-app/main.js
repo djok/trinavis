@@ -1,6 +1,4 @@
-// Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
-const path = require('path')
 
 function createWindow () {
   // Create the browser window.
@@ -8,8 +6,14 @@ function createWindow () {
       frame: false, 
       titleBarStyle: 'hidden',
       // fullscreen: true,
-      kiosk: true
+      kiosk: true,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
   })
+  mainWindow.webContents.openDevTools()
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
