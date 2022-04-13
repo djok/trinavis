@@ -61,71 +61,6 @@ readMp3Files().then(mp3files => {
   // window.addEventListener('keydown', (e) => {console.log(e)})
 })
 
-// function volumeControl(up) {
-//   window.dispatchEvent(new KeyboardEvent('keydown', {
-//     isTrusted: true,
-//     altKey: false,
-//     bubbles: true,
-//     cancelBubble: false,
-//     cancelable: true,
-//     charCode: 0,
-//     code: "",
-//     composed: true,
-//     ctrlKey: false,
-//     currentTarget: null,
-//     defaultPrevented: false,
-//     detail: 0,
-//     eventPhase: 0,
-//     isComposing: false,
-//     key: "AudioVolumeUp",
-//     keyCode: 175,
-//     location: 0,
-//     metaKey: false,
-//     // path: (4) [body, html, document, global],
-//     repeat: false,
-//     returnValue: true,
-//     shiftKey: false,
-//     // sourceCapabilities: InputDeviceCapabilities {firesTouchEvents: false},
-//     // srcElement: body,
-//     // target: body,
-//     // timeStamp: 133473.30000001192,
-//     // type: "keyup",
-//     // view: global {window: global, self: global, document: document, name: '', location: Location, …},
-//     which: 175,
-//   }));
-//   window.dispatchEvent(new KeyboardEvent('keyup', {
-//     isTrusted: true,
-//     altKey: false,
-//     bubbles: true,
-//     cancelBubble: false,
-//     cancelable: true,
-//     charCode: 0,
-//     code: "",
-//     composed: true,
-//     ctrlKey: false,
-//     currentTarget: null,
-//     defaultPrevented: false,
-//     detail: 0,
-//     eventPhase: 0,
-//     isComposing: false,
-//     key: "AudioVolumeUp",
-//     keyCode: 175,
-//     location: 0,
-//     metaKey: false,
-//     // path: (4) [body, html, document, global],
-//     repeat: false,
-//     returnValue: true,
-//     shiftKey: false,
-//     // sourceCapabilities: InputDeviceCapabilities {firesTouchEvents: false},
-//     // srcElement: body,
-//     // target: body,
-//     // timeStamp: 133473.30000001192,
-//     // type: "keyup",
-//     // view: global {window: global, self: global, document: document, name: '', location: Location, …},
-//     which: 175,
-//   }));
-// }
-
 function newKeyPressHandler(mp3Files,conf) {
   return function (event) {
     console.log(conf)
@@ -337,6 +272,24 @@ function newKeyPressHandler(mp3Files,conf) {
       case "0": //Insert
       case "Insert":
         var key = "0"
+        if (conf.keyStar) {
+          conf.bufStar = conf.bufStar + key;
+          if (conf.bufStar.length == 2) {
+            conf.keyStar = !conf.keyStar
+            songId = conf.bufStar
+            conf.bufStar = ""
+            playNow("star", songId, mp3Files, Amplitude)
+          }
+        } else {
+          if (conf.keyEscape) {
+            conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
+          }
+        }
+        break;
+      case ".":
+        var key = "00"
         if (conf.keyStar) {
           conf.bufStar = conf.bufStar + key;
           if (conf.bufStar.length == 2) {
