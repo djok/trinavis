@@ -1,13 +1,11 @@
+const { SSL_OP_EPHEMERAL_RSA } = require('constants');
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
 
 const asset_path = "assets0f8m3quovf"
 const path = require('path')
 
-var keyEscape = false
-var bufEscape = ""
-var keyStar = false
-var bufStar = ""
+// let robot = require('robotjs');
 
 async function* getFiles(dir) {
   const dirents = await readdir(dir, { withFileTypes: true });
@@ -38,7 +36,7 @@ async function readMp3Files() {
           artist: `Unknown`,
           album: `${plist}`,
           url: `${f}`,
-          cover_art_url: ''
+          // cover_art_url: ''
         }
         break;
       case "png":
@@ -51,6 +49,7 @@ async function readMp3Files() {
 
 readMp3Files().then(mp3files => {
   Amplitude.init({ songs: [initPlaylist("star", mp3files)] });
+
   conf = {
     playlist: "star",
     keyEscape: false,
@@ -59,18 +58,93 @@ readMp3Files().then(mp3files => {
     bufStar: ""
   }
   window.addEventListener('keyup', newKeyPressHandler(mp3files,conf), true)
+  // window.addEventListener('keydown', (e) => {console.log(e)})
 })
+
+// function volumeControl(up) {
+//   window.dispatchEvent(new KeyboardEvent('keydown', {
+//     isTrusted: true,
+//     altKey: false,
+//     bubbles: true,
+//     cancelBubble: false,
+//     cancelable: true,
+//     charCode: 0,
+//     code: "",
+//     composed: true,
+//     ctrlKey: false,
+//     currentTarget: null,
+//     defaultPrevented: false,
+//     detail: 0,
+//     eventPhase: 0,
+//     isComposing: false,
+//     key: "AudioVolumeUp",
+//     keyCode: 175,
+//     location: 0,
+//     metaKey: false,
+//     // path: (4) [body, html, document, global],
+//     repeat: false,
+//     returnValue: true,
+//     shiftKey: false,
+//     // sourceCapabilities: InputDeviceCapabilities {firesTouchEvents: false},
+//     // srcElement: body,
+//     // target: body,
+//     // timeStamp: 133473.30000001192,
+//     // type: "keyup",
+//     // view: global {window: global, self: global, document: document, name: '', location: Location, …},
+//     which: 175,
+//   }));
+//   window.dispatchEvent(new KeyboardEvent('keyup', {
+//     isTrusted: true,
+//     altKey: false,
+//     bubbles: true,
+//     cancelBubble: false,
+//     cancelable: true,
+//     charCode: 0,
+//     code: "",
+//     composed: true,
+//     ctrlKey: false,
+//     currentTarget: null,
+//     defaultPrevented: false,
+//     detail: 0,
+//     eventPhase: 0,
+//     isComposing: false,
+//     key: "AudioVolumeUp",
+//     keyCode: 175,
+//     location: 0,
+//     metaKey: false,
+//     // path: (4) [body, html, document, global],
+//     repeat: false,
+//     returnValue: true,
+//     shiftKey: false,
+//     // sourceCapabilities: InputDeviceCapabilities {firesTouchEvents: false},
+//     // srcElement: body,
+//     // target: body,
+//     // timeStamp: 133473.30000001192,
+//     // type: "keyup",
+//     // view: global {window: global, self: global, document: document, name: '', location: Location, …},
+//     which: 175,
+//   }));
+// }
 
 function newKeyPressHandler(mp3Files,conf) {
   return function (event) {
-    console.log(conf);
-    console.log(`You pressed ${event.key}`)
+    console.log(conf)
+    console.log(event)
     switch (event.key) {
       case 'Backspace':
         break;
       case 'Enter':
         if (conf.keyEscape) {
-
+          console.log(conf.bufEscape);
+          conf.keyEscape = !conf.keyEscape
+          newPlaylist = conf.bufEscape
+          conf.bufEscape = ""
+          if (mp3Files[`${newPlaylist}:png`]) {
+            // console.log(Amplitude.getDefaultAlbumArt());
+            Amplitude.stop()
+            Amplitude.init({ songs: [initPlaylist(newPlaylist, mp3Files)] });    
+            conf.playlist = newPlaylist         
+          }
         } else {
           console.log(Amplitude.getPlayerState())
           switch (Amplitude.getPlayerState()) {
@@ -89,9 +163,6 @@ function newKeyPressHandler(mp3Files,conf) {
           }
         }
         break;
-      case "+":
-        document.getElementById("amplitude-volume-up").click()
-        break;
       case "1": //End
       case "End":
         var key = "1"
@@ -101,13 +172,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "2": //ArrowDown
@@ -119,13 +191,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "3": //PageDown
@@ -137,13 +210,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "4": //ArrowLeft
@@ -155,13 +229,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "5": //Clear
@@ -173,13 +248,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "6": //ArrowRight
@@ -191,13 +267,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "7": //Home
@@ -209,13 +286,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "8": //ArrowUp
@@ -227,13 +305,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "9": //PageUp
@@ -245,13 +324,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "0": //Insert
@@ -263,13 +343,14 @@ function newKeyPressHandler(mp3Files,conf) {
             conf.keyStar = !conf.keyStar
             songId = conf.bufStar
             conf.bufStar = ""
-            playNow("star", songId, mp3Files)
+            playNow("star", songId, mp3Files, Amplitude)
           }
         } else {
           if (conf.keyEscape) {
             conf.bufEscape = conf.bufEscape + key
+          } else { 
+            playNow(conf.playlist, key, mp3Files, Amplitude) 
           }
-          playNow(conf.playlist, key, mp3Files)
         }
         break;
       case "*":
@@ -280,20 +361,36 @@ function newKeyPressHandler(mp3Files,conf) {
         conf.keyEscape = !conf.keyEscape
         conf.bufStar = ""
         break;
+      case "+": //AudioVolumeUp
+        var volume = Amplitude.getVolume() + 10
+        if (volume > 100) volume = 100
+        Amplitude.setVolume(volume)
+        break;
+      case "-": //AudioVolumeDown
+        var volume = Amplitude.getVolume() - 10
+        if (volume < 0) volume = 0
+        Amplitude.setVolume(volume)
+        break;
     }
   }
 }
 
 
-function playNow(plist, songId, mp3Files) {
+function playNow(plist, songId, mp3Files, a) {
   if (mp3Files[`${plist}:${songId}`] === undefined) {
     console.log("Song not found");
     return;
   }
   song = mp3Files[`${plist}:${songId}`]
-  if (plist != "star") {song.cover_art_url = mp3Files[`${plist}:png`]}
+  console.log(mp3Files[`${plist}:png`]);
+  if (plist == "star") {
+    song.cover_art_url = mp3Files[`${conf.playlist}:png`]
+  } else {
+    song.cover_art_url = mp3Files[`${plist}:png`]
+  }
   // song.cover_art_url = mp3Files[`${plist}:png`]
-  Amplitude.playNow(song)
+  a.stop()
+  a.playNow(song)
 }
 
 function initPlaylist(plist, myList) {
