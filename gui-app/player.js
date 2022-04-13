@@ -69,6 +69,7 @@ function newKeyPressHandler(mp3Files,conf) {
       case 'Backspace':
         break;
       case 'Enter':
+      case 'NumpadEnter':
         if (conf.keyEscape) {
           console.log(conf.bufEscape);
           conf.keyEscape = !conf.keyEscape

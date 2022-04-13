@@ -1,2 +1,3 @@
 .vs/**
 gui-app/node_modules/**
+gui-app/package-lock.json
