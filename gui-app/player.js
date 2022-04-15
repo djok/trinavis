@@ -311,6 +311,12 @@ function newKeyPressHandler(mp3Files,conf) {
         conf.keyStar = !conf.keyStar
         conf.bufStar = ""
         break;
+      case "Backspace":
+        conf.keyStar = false
+        conf.bufStar = ""
+        conf.keyEscape = false
+        conf.bufEscape = ""
+        break;
       case "NumLock":
       case "Escape":
         conf.keyEscape = !conf.keyEscape
