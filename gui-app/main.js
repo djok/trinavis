@@ -1,4 +1,6 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, powerSaveBlocker} = require('electron')
+// const { powerSaveBlocker } = require('electron');
+// const powerSaveBlocker = app.remote.powerSaveBlocker;
 
 function createWindow () {
   // Create the browser window.
@@ -28,6 +30,12 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
+  powerMonitor.on("lock-screen", () => {
+    powerSaveBlocker.start("prevent-display-sleep");
+  });
+  powerMonitor.on("suspend", () => {
+    powerSaveBlocker.start("prevent-app-suspension");
+  });
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
