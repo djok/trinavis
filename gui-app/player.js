@@ -5,6 +5,7 @@ const { readdir } = require('fs').promises;
 const asset_path = "assets0f8m3quovf"
 const path = require('path')
 
+
 // let robot = require('robotjs');
 
 async function* getFiles(dir) {
