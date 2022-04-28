@@ -5,9 +5,6 @@ const { readdir } = require('fs').promises;
 const asset_path = "assets0f8m3quovf"
 const path = require('path')
 
-
-// let robot = require('robotjs');
-
 async function* getFiles(dir) {
   const dirents = await readdir(dir, { withFileTypes: true });
   for (const dirent of dirents) {
@@ -67,8 +64,6 @@ function newKeyPressHandler(mp3Files,conf) {
     console.log(conf)
     console.log(event)
     switch (event.key) {
-      case 'Backspace':
-        break;
       case 'Enter':
       case 'NumpadEnter':
         if (conf.keyEscape) {
