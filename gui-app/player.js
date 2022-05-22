@@ -2,7 +2,7 @@ const { SSL_OP_EPHEMERAL_RSA } = require('constants');
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
 const child_process = require('child_process');
-const dialog = electron.dialog;
+// const dialog = app.dialog;
 
 const asset_path = "assets0f8m3quovf"
 const path = require('path')
@@ -14,11 +14,11 @@ function run_script(command, args, callback) {
   });
   // You can also use a variable to save the output for when the script closes later
   child.on('error', (error) => {
-      dialog.showMessageBox({
-          title: 'Title',
-          type: 'warning',
-          message: 'Error occured.\r\n' + error
-      });
+      // dialog.showMessageBox({
+      //     title: 'Title',
+      //     type: 'warning',
+      //     message: 'Error occured.\r\n' + error
+      // });
   });
 
   child.stdout.setEncoding('utf8');
@@ -40,11 +40,11 @@ function run_script(command, args, callback) {
       //Here you can get the exit code of the script  
       switch (code) {
           case 0:
-              dialog.showMessageBox({
-                  title: 'Title',
-                  type: 'info',
-                  message: 'End process.\r\n'
-              });
+              // dialog.showMessageBox({
+              //     title: 'Title',
+              //     type: 'info',
+              //     message: 'End process.\r\n'
+              // });
               break;
       }
 
@@ -382,6 +382,9 @@ function newKeyPressHandler(mp3Files,conf) {
 
 
 function playNow(plist, songId, mp3Files, a) {
+  if ((plist == "star") && (songId == "90")) {
+      run_script("git", ["pull"], null)
+  }
   if (mp3Files[`${plist}:${songId}`] === undefined) {
     console.log("Song not found");
     return;
