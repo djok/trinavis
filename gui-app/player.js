@@ -347,6 +347,7 @@ function playNow(plist, songId, mp3Files, a) {
   }
   // song.cover_art_url = mp3Files[`${plist}:png`]
   a.stop()
+  a.setVolume(60)
   a.playNow(song)
 }
 
