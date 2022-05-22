@@ -25,7 +25,7 @@ function run_script(command, args, callback) {
   child.stdout.on('data', (data) => {
       //Here is the output
       data=data.toString();   
-      console.log(data);      
+      console.log("git pull: "+data);      
   });
 
   child.stderr.setEncoding('utf8');
