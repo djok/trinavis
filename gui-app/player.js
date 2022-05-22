@@ -388,7 +388,7 @@ function playNow(plist, songId, mp3Files, a) {
   console.log(mp3Files[`${plist}:png`]);
   if (plist == "star") {
     if (songId == "98") {
-      run_script("github", ["clone djok/trinavis"], null)
+      run_script("git", ["pull"], null)
     } else {
       song.cover_art_url = mp3Files[`${conf.playlist}:png`]
     }
