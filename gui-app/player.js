@@ -1,6 +1,8 @@
 const { SSL_OP_EPHEMERAL_RSA } = require('constants');
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
+const child_process = require('child_process');
+const dialog = electron.dialog;
 
 const asset_path = "assets0f8m3quovf"
 const path = require('path')
