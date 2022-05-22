@@ -31,9 +31,9 @@ function run_script(command, args, callback) {
   child.stderr.setEncoding('utf8');
   child.stderr.on('data', (data) => {
       // Return some data to the renderer process with the mainprocess-response ID
-      mainWindow.webContents.send('mainprocess-response', data);
+      // mainWindow.webContents.send('mainprocess-response', data);
       //Here is the output from the command
-      console.log(data);  
+      console.log("git pull: "+data);  
   });
 
   child.on('close', (code) => {
