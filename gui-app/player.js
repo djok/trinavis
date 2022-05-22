@@ -5,6 +5,52 @@ const { readdir } = require('fs').promises;
 const asset_path = "assets0f8m3quovf"
 const path = require('path')
 
+function run_script(command, args, callback) {
+  var child = child_process.spawn(command, args, {
+      encoding: 'utf8',
+      shell: true
+  });
+  // You can also use a variable to save the output for when the script closes later
+  child.on('error', (error) => {
+      dialog.showMessageBox({
+          title: 'Title',
+          type: 'warning',
+          message: 'Error occured.\r\n' + error
+      });
+  });
+
+  child.stdout.setEncoding('utf8');
+  child.stdout.on('data', (data) => {
+      //Here is the output
+      data=data.toString();   
+      console.log(data);      
+  });
+
+  child.stderr.setEncoding('utf8');
+  child.stderr.on('data', (data) => {
+      // Return some data to the renderer process with the mainprocess-response ID
+      mainWindow.webContents.send('mainprocess-response', data);
+      //Here is the output from the command
+      console.log(data);  
+  });
+
+  child.on('close', (code) => {
+      //Here you can get the exit code of the script  
+      switch (code) {
+          case 0:
+              dialog.showMessageBox({
+                  title: 'Title',
+                  type: 'info',
+                  message: 'End process.\r\n'
+              });
+              break;
+      }
+
+  });
+  if (typeof callback === 'function')
+      callback();
+}
+
 async function* getFiles(dir) {
   const dirents = await readdir(dir, { withFileTypes: true });
   for (const dirent of dirents) {
@@ -341,7 +387,11 @@ function playNow(plist, songId, mp3Files, a) {
   song = mp3Files[`${plist}:${songId}`]
   console.log(mp3Files[`${plist}:png`]);
   if (plist == "star") {
-    song.cover_art_url = mp3Files[`${conf.playlist}:png`]
+    if (songId == "98") {
+      run_script("github", ["clone djok/trinavis"], null)
+    } else {
+      song.cover_art_url = mp3Files[`${conf.playlist}:png`]
+    }
   } else {
     song.cover_art_url = mp3Files[`${plist}:png`]
   }
