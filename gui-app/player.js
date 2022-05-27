@@ -373,7 +373,7 @@ function newKeyPressHandler(mp3Files,conf) {
         break;
       case "-": //AudioVolumeDown
         var volume = Amplitude.getVolume() - 10
-        if (volume < 0) volume = 0
+        if (volume < 5) volume = 5
         Amplitude.setVolume(volume)
         break;
     }
