@@ -1,4 +1,5 @@
 #!/bin/bash
+git pull
 gsettings set org.gnome.desktop.screensaver lock-enabled false
 gsettings set org.gnome.desktop.lockdown disable-lock-screen true
 gsettings set org.gnome.desktop.background picture-options 'centered'
