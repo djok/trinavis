@@ -365,6 +365,7 @@ function newKeyPressHandler(mp3Files,conf) {
         break;
       case "NumLock":
         break;
+      case "/":
       case "NumpadDivide":
       case "Escape":
         conf.keyEscape = !conf.keyEscape
