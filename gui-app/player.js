@@ -365,6 +365,7 @@ function newKeyPressHandler(mp3Files,conf) {
       case "Escape":
         conf.keyEscape = !conf.keyEscape
         conf.bufStar = ""
+        conf.bufEscape = ""
         break;
       case "+": //AudioVolumeUp
         var volume = Amplitude.getVolume() + 10
