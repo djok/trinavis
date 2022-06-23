@@ -355,6 +355,7 @@ function newKeyPressHandler(mp3Files,conf) {
       case "*":
         conf.keyStar = !conf.keyStar
         conf.bufStar = ""
+        conf.keyEscape = false
         break;
       case "Backspace":
         conf.keyStar = false
@@ -363,10 +364,13 @@ function newKeyPressHandler(mp3Files,conf) {
         conf.bufEscape = ""
         break;
       case "NumLock":
+        break;
+      case "NumpadDivide":
       case "Escape":
         conf.keyEscape = !conf.keyEscape
         conf.bufStar = ""
         conf.bufEscape = ""
+        conf.keyStar = false
         break;
       case "+": //AudioVolumeUp
         var volume = Amplitude.getVolume() + 10
