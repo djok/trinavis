@@ -109,6 +109,7 @@ readMp3Files().then(mp3files => {
 
 function newKeyPressHandler(mp3Files,conf) {
   return function (event) {
+    console.log("Before event status")
     console.log(conf)
     console.log(event)
     switch (event.key) {
@@ -378,6 +379,8 @@ function newKeyPressHandler(mp3Files,conf) {
         Amplitude.setVolume(volume)
         break;
     }
+    console.log("After event status")
+    console.log(conf)
   }
 }
 
