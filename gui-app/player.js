@@ -374,14 +374,16 @@ function newKeyPressHandler(mp3Files,conf) {
         conf.keyStar = false
         break;
       case "+": //AudioVolumeUp
-        var volume = Amplitude.getVolume() + 10
-        if (volume > 100) volume = 100
-        Amplitude.setVolume(volume)
+        run_script("amixer", ["set Master -- 10%+"], null)
+        // var volume = Amplitude.getVolume() + 10
+        // if (volume > 100) volume = 100
+        // Amplitude.setVolume(volume)
         break;
       case "-": //AudioVolumeDown
-        var volume = Amplitude.getVolume() - 10
-        if (volume < 5) volume = 5
-        Amplitude.setVolume(volume)
+        run_script("amixer", ["set Master -- 10%-"], null)
+        // var volume = Amplitude.getVolume() - 10
+        // if (volume < 5) volume = 5
+        // Amplitude.setVolume(volume)
         break;
     }
     console.log("After event status")

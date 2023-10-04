@@ -24,3 +24,9 @@ gsettings set org.gnome.desktop.background picture-options 'scaled'
 gsettings set org.gnome.desktop.background picture-uri file:////home/rosen/trinavis/gui-app/assets0f8m3quovf/star/bg.bulgaria.png
 sudo apt install gnome-startup-applications
 ```
+
+
+### Install Electron JS on Rasberian OS
+```bash
+npm i -D electron --arch=armv7l
+```
