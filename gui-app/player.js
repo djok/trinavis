@@ -2,6 +2,7 @@ const { SSL_OP_EPHEMERAL_RSA } = require('constants');
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
 const child_process = require('child_process');
+const { ipcRenderer } = require('electron');
 // const dialog = app.dialog;
 
 const asset_path = "assets0f8m3quovf"
@@ -374,7 +375,7 @@ function newKeyPressHandler(mp3Files,conf) {
         conf.keyStar = false
         break;
       case "+": //AudioVolumeUp
-      case "Shift":
+      // case "Shift":
         // run_script("amixer", ["set Master -- 10%+"], null)
         var volume = Amplitude.getVolume() + 10
         if (volume > 100) volume = 100
