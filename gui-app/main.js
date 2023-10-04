@@ -1,4 +1,4 @@
-const {app, BrowserWindow, powerSaveBlocker} = require('electron')
+const {app, BrowserWindow, ipcMain, powerSaveBlocker} = require('electron')
 // const { powerSaveBlocker } = require('electron');
 // const powerSaveBlocker = app.remote.powerSaveBlocker;
 
@@ -49,3 +49,7 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+ipcMain.on('terminate-app', () => {
+  app.quit();
+});
