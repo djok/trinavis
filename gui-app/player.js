@@ -395,9 +395,13 @@ function newKeyPressHandler(mp3Files,conf) {
 
 
 function playNow(plist, songId, mp3Files, a) {
-  if ((plist == "star") && (songId == "90")) {
-      run_script("git", ["pull"], null)
+  if ((plist == "star") && (songId == "98")) {
+    run_script("git", ["pull"], null)
   }
+  if ((plist == "star") && (songId == "99")) {
+    run_script("killall", ["matchbox-keyboard"], null)
+    ipcRenderer.send('terminate-app');
+}
   if (mp3Files[`${plist}:${songId}`] === undefined) {
     console.log("Song not found");
     return;
@@ -405,14 +409,7 @@ function playNow(plist, songId, mp3Files, a) {
   song = mp3Files[`${plist}:${songId}`]
   console.log(mp3Files[`${plist}:png`]);
   if (plist == "star") {
-    if (songId == "98") {
-      run_script("git", ["pull"], null)
-    } else if (songId == "99") {
-      run_script("killall", ["matchbox-keyboard"], null)
-      ipcRenderer.send('terminate-app');
-    } else {
-      song.cover_art_url = mp3Files[`${conf.playlist}:png`]
-    }
+    song.cover_art_url = mp3Files[`${conf.playlist}:png`]
   } else {
     song.cover_art_url = mp3Files[`${plist}:png`]
   }
