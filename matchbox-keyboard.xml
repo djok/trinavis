@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE keyboard SYSTEM "keyboard.dtd">
+
+<keyboard>
+
+    <layout id="0">
+
+        <row>
+
+            <key><default display="7" /></key>
+
+            <key><default display="8" /></key>
+
+            <key><default display="9" /></key>
+
+            <key><default display="⇦" action="backspace" /></key>
+
+            <key><default display="/" /></key>
+
+        </row>
+
+        <row>
+
+            <key><default display="4" /></key>
+
+            <key><default display="5" /></key>
+
+            <key><default display="6" /></key>
+
+            <space/>
+
+            <key><default display="+" action="xkeysym:KP_Add"  /></key>
+
+
+        </row>
+
+        <row>
+
+            <key><default display="1" /></key>
+
+            <key><default display="2" /></key>
+
+            <key><default display="3" /></key>
+
+            <space/>
+
+            <key><default display="-" action="xkeysym:KP_Subtract" /></key>
+
+        </row>
+height
+        <row>
+
+            <key><default display="0" /></key>
+
+            <key><default display="." /></key>
+
+            <key><default display="*" action="xkeysym:KP_Multiply" /></key>
+
+            <space/>
+
+            <key><default display="⏎" action="return" /></key>
+
+        </row>
+
+    </layout>
+
+</keyboard>
+
